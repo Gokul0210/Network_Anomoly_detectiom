@@ -1,0 +1,77 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<h2 class="text-success mb-4">Anomaly Detection Summary</h2>
+
+<div class="row text-center">
+
+    <div class="col-md-4">
+        <div class="card shadow-sm p-3 bg-light">
+            <h4>Total Records</h4>
+            <h2 class="text-primary">{{ total }}</h2>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card shadow-sm p-3 bg-light">
+            <h4>Normal Traffic</h4>
+            <h2 class="text-success">{{ normal }}</h2>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card shadow-sm p-3 bg-light">
+            <h4>Anomalies Detected</h4>
+            <h2 class="text-danger">{{ attack }}</h2>
+        </div>
+    </div>
+
+</div>
+
+<div class="mt-4">
+    <a href="/uploads/{{ filename }}" class="btn btn-warning">Download Full Results</a>
+</div>
+
+<div class="mt-4">
+    <img src="/static/model_plots/combined_roc_curve.png" class="img-fluid mb-3">
+    <img src="/static/model_plots/combined_evaluation_metrics.png" class="img-fluid">
+</div>
+
+<h3 class="mt-4">Prediction Results (First 50 Rows)</h3>
+
+<div class="mt-3">
+    <a href="/results?page=1" class="btn btn-info">View All Results (Paginated)</a>
+</div>
+
+<table class="table table-bordered table-striped mt-3">
+    <thead class="table-dark">
+        <tr>
+            <th>#</th>
+            <th>duration</th>
+            <th>src_bytes</th>
+            <th>dst_bytes</th>
+            <th>RF_Prediction</th>
+            <th>LightGBM_Prediction</th>
+            <th>SVM_Prediction</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for i, row in sample.iterrows() %}
+
+        <tr {% if row.RF_Prediction or row.LightGBM_Prediction or row.SVM_Prediction %} style="background-color:#ffcccc;" {% endif %}>
+
+            <td>{{ i }}</td>
+            <td>{{ row.duration }}</td>
+            <td>{{ row.src_bytes }}</td>
+            <td>{{ row.dst_bytes }}</td>
+            <td>{{ row.RF_Prediction }}</td>
+            <td>{{ row.LightGBM_Prediction }}</td>
+            <td>{{ row.SVM_Prediction }}</td>
+        </tr>
+
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

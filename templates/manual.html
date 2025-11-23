@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<h2 class="text-primary mb-4">Manual Data Entry</h2>
+
+<div class="card shadow p-4">
+
+<form action="/manual_predict" method="POST">
+
+<div class="row">
+
+    {% for col in feature_cols %}
+    <div class="col-md-4 mb-3">
+        <label class="form-label">{{ col }}</label>
+        <input type="text" name="{{ col }}" class="form-control" required>
+    </div>
+    {% endfor %}
+
+</div>
+
+<button class="btn btn-primary w-100 mt-3">Predict</button>
+
+</form>
+
+</div>
+
+{% endblock %}
